@@ -1,0 +1,33 @@
+name: Contexts and Expressions
+
+on:
+  push:
+    branches: 
+      - "*"
+
+jobs:
+  status-check:
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: print phrase
+        run: echo "Running on branch ${{ github.ref }}"
+
+      - name: setup
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.10 
+
+      - name: run script
+        run: python main.py
+
+  release:
+    needs: ["status-check"]
+    if: github.ref == 'refs/heads/main'
+    runs-on: "ubuntu-latest"
+    steps: 
+      - name: release to prod.
+        run: echo  "Releasing to Production...".
+    
